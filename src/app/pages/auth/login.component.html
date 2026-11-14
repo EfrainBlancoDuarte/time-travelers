@@ -1,0 +1,41 @@
+<div class="page">
+  <header class="brand">
+    <small>Welcome to</small>
+    <h1>Time Travelers</h1>
+  </header>
+  <div class="hero">
+    <img src="images/cover-sm.webp" srcset="images/cover-sm.webp 760w, images/cover.webp 1280w" sizes="(max-width: 480px) 100vw, 480px" alt="Three young explorers in front of a time portal, between the pyramids, a Greek temple and the Colosseum" />
+  </div>
+
+  <section class="sheet">
+    <div class="title fade-up">
+      <h2>Welcome back!</h2>
+      <p>Sign in to continue your journey through time.</p>
+    </div>
+
+    <form (ngSubmit)="submit()" class="fade-up" style="animation-delay: 0.08s">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" class="input" [(ngModel)]="name" autocomplete="username" placeholder="Your explorer name" required />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password">
+          <input id="password" name="password" class="input" [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" autocomplete="current-password" placeholder="Your secret password" required />
+          <button type="button" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+            <app-icon [name]="showPassword() ? 'eye-off' : 'eye'" [size]="22" />
+          </button>
+        </div>
+      </div>
+
+      @if (error()) {
+        <p class="form-error" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary block submit">Sign in</button>
+    </form>
+
+    <p class="switch">New explorer?<a routerLink="/signup">Create an account</a></p>
+  </section>
+</div>

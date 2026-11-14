@@ -1,0 +1,68 @@
+@let m = mission();
+
+<div class="page" [style.--accent]="m.color">
+  <header class="hero">
+    <img [src]="m.image" [alt]="m.civilization" width="1100" height="733" />
+    <div class="bar">
+      <a class="icon-btn" routerLink="/map" aria-label="Back to the map"><app-icon name="back" /></a>
+      <span class="chip">Mission {{ m.id }}</span>
+    </div>
+    <div class="heading fade-up">
+      <p>{{ m.civilization }} · {{ m.era }}</p>
+      <h1>{{ m.title }}</h1>
+    </div>
+  </header>
+
+  <section class="sheet">
+    <div class="goal fade-up" style="animation-delay: 0.05s">
+      <span class="goal-icon">🎯</span>
+      <div>
+        <h2>Your mission</h2>
+        <p>{{ m.intro }}</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Learn before you play</h2>
+
+    <ol class="lessons">
+      @for (l of m.lessons; track l.title; let i = $index) {
+        <li class="lesson fade-up" [style.animation-delay]="0.1 + i * 0.06 + 's'">
+          <span class="emoji" aria-hidden="true">{{ l.emoji }}</span>
+          <div>
+            <h3>{{ l.title }}</h3>
+            <p>{{ l.text }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+
+    @if (m.infographic) {
+      <h2 class="section-title">Explore the map</h2>
+      <button type="button" class="infographic fade-up" (click)="openViewer()">
+        <img [src]="m.infographic" alt="Illustrated map of Ancient Egypt and the Nile" loading="lazy" width="1024" height="1482" />
+        <span class="zoom-hint"><app-icon name="zoom" [size]="18" /> Tap to explore</span>
+      </button>
+    }
+  </section>
+
+  <footer class="cta">
+    <p>{{ m.questions.length }} questions · win up to 4 ⭐</p>
+    <a class="btn btn-sun block" [routerLink]="['/mission', m.id, 'challenge']">
+      Start Challenge <app-icon name="next" [stroke]="2.8" />
+    </a>
+  </footer>
+</div>
+
+@if (viewerOpen() && m.infographic) {
+  <div class="viewer" role="dialog" aria-modal="true" aria-label="Map viewer">
+    <div class="viewer-bar">
+      <span>{{ zoomed() ? 'Drag to move around' : 'Tap the image to zoom in' }}</span>
+      <button type="button" class="icon-btn" (click)="viewerOpen.set(false)" aria-label="Close"><app-icon name="x" /></button>
+    </div>
+    <div class="viewer-scroll">
+      <button type="button" class="zoom-toggle" [class.zoomed]="zoomed()" (click)="zoomed.set(!zoomed())" [attr.aria-label]="zoomed() ? 'Zoom out' : 'Zoom in'">
+        <img [src]="m.infographic" alt="Illustrated map of Ancient Egypt and the Nile" />
+      </button>
+    </div>
+  </div>
+}

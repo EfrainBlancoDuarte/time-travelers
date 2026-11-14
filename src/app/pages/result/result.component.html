@@ -1,0 +1,57 @@
+@let m = mission();
+
+@if (attempt(); as a) {
+  <div class="page" [style.--accent]="m.color">
+    <header class="top">
+      <div class="bar">
+        <a class="icon-btn" routerLink="/map" aria-label="Back to the map"><app-icon name="x" /></a>
+        <div class="titles">
+          <p>Mission {{ m.id }}</p>
+          <h1>{{ m.title }}</h1>
+        </div>
+        <span class="spacer"></span>
+      </div>
+
+      <div class="score">
+        <h2 class="fade-up">{{ message().title }}</h2>
+        @if (a.stars > 0) {
+          <app-stars [value]="a.stars" [size]="46" [animate]="true" />
+        }
+        <p class="fade-up" style="animation-delay: 0.15s">{{ message().text }}</p>
+      </div>
+    </header>
+
+    <div class="visual">
+      @if (a.stars > 0) {
+        <img class="victory" src="images/victory.webp" alt="A happy young explorer raising a golden medal" width="1000" height="667" />
+      } @else {
+        <div class="oops" aria-hidden="true">🙈</div>
+      }
+      <div class="result-chip">
+        <strong>{{ a.correct }}</strong> of {{ m.questions.length }} correct
+      </div>
+    </div>
+
+    <section class="review">
+      <div class="review-head">
+        <h2>Let’s review</h2>
+        <span class="date"><app-icon name="calendar" [size]="16" /> {{ a.date | date: 'MMM d, h:mm a' }}</span>
+      </div>
+      <app-feedback-list [mission]="m" [attempt]="a" />
+    </section>
+
+    <footer class="actions">
+      @if (nextMission(); as next) {
+        <a class="btn btn-primary block" [routerLink]="['/mission', next.id]" replaceUrl>
+          Go to Mission {{ next.id }} <app-icon name="next" [stroke]="2.8" />
+        </a>
+      } @else {
+        <div class="finale">🏆 You visited every civilization! You are a true Time Traveler.</div>
+        <a class="btn btn-primary block" routerLink="/map">Back to the map <app-icon name="map" /></a>
+      }
+      <a class="btn btn-ghost block" [routerLink]="['/mission', m.id, 'challenge']" replaceUrl>
+        <app-icon name="retry" /> Try again
+      </a>
+    </footer>
+  </div>
+}

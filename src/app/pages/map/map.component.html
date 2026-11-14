@@ -1,0 +1,91 @@
+<header class="top">
+  <div class="hello fade-up">
+    <p class="small">Welcome,</p>
+    <h1>{{ firstName() }}! <span class="wave">👋</span></h1>
+    <p class="sub">Where will we travel today?</p>
+  </div>
+
+  <div class="stats fade-up" style="animation-delay: 0.08s">
+    <div class="stat">
+      <span class="emoji">⭐</span>
+      <div>
+        <strong>{{ progress.totalStars() }}<small>/{{ progress.maxStars }}</small></strong>
+        <span>Stars</span>
+      </div>
+    </div>
+    <div class="stat">
+      <span class="emoji">🧭</span>
+      <div>
+        <strong>{{ progress.completedCount() }}<small>/{{ missions().length }}</small></strong>
+        <span>Missions</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="content">
+  <div class="section-title">
+    <h2>Travel Map</h2>
+    <p>Finish each mission to unlock the next one.</p>
+  </div>
+
+  <ol class="path">
+    @for (m of missions(); track m.id; let i = $index; let last = $last) {
+      <li class="stop fade-up" [style.animation-delay]="0.12 + i * 0.1 + 's'" [style.--accent]="m.color">
+        <span class="node" [class.done]="m.result" [class.locked]="!m.unlocked">
+          @if (m.result) {
+            <app-icon name="check" [size]="16" [stroke]="3.2" />
+          } @else if (!m.unlocked) {
+            <app-icon name="lock" [size]="14" [stroke]="2.6" />
+          } @else {
+            {{ m.id }}
+          }
+        </span>
+        @if (!last) {
+          <span class="line" [class.lit]="m.result"></span>
+        }
+
+        @if (m.unlocked) {
+          <a class="card" [class.next]="m.id === nextId()" [routerLink]="['/mission', m.id]">
+            <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: m }" />
+          </a>
+        } @else {
+          <div class="card locked" aria-disabled="true">
+            <ng-container *ngTemplateOutlet="cardBody; context: { $implicit: m }" />
+          </div>
+        }
+      </li>
+    }
+  </ol>
+</section>
+
+<ng-template #cardBody let-m>
+  <div class="media">
+    <img [src]="m.thumb" [alt]="m.civilization" loading="lazy" width="520" height="347" />
+    <span class="era chip">{{ m.era }}</span>
+    @if (m.id === nextId()) {
+      <span class="badge">{{ m.id === 1 ? 'Start here!' : 'Next stop!' }}</span>
+    }
+    @if (!m.unlocked) {
+      <div class="lock-overlay">
+        <span class="lock-icon"><app-icon name="lock" [size]="26" /></span>
+        <p>Finish Mission {{ m.id - 1 }} to unlock</p>
+      </div>
+    }
+  </div>
+  <div class="body">
+    <p class="kicker">Mission {{ m.id }} · {{ m.civilization }}</p>
+    <h3>{{ m.title }}</h3>
+    <p class="tagline">{{ m.tagline }}</p>
+    <div class="foot">
+      @if (m.result) {
+        <app-stars [value]="m.result.bestStars" [size]="20" />
+        <span class="action">Play again <app-icon name="next" [size]="16" [stroke]="2.6" /></span>
+      } @else if (m.unlocked) {
+        <span class="go"><app-icon name="play" [size]="14" /> Start mission</span>
+      } @else {
+        <span class="soon">Locked</span>
+      }
+    </div>
+  </div>
+</ng-template>

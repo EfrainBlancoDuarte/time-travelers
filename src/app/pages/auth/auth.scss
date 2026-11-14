@@ -1,0 +1,131 @@
+// Shared styles for the Sign in and Sign up screens
+
+:host {
+  display: block;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  background: var(--clay);
+}
+
+.hero {
+  position: relative;
+  height: clamp(210px, 32dvh, 290px);
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    animation: slow-zoom 18s ease-in-out infinite alternate;
+  }
+
+  // Soft blend between the orange band and the picture
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(200, 80, 30, 0.55) 0%, rgba(200, 80, 30, 0) 22%);
+  }
+}
+
+@keyframes slow-zoom {
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.brand {
+  padding: calc(22px + var(--safe-top)) 16px 16px;
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 85% 0%, rgba(255, 197, 49, 0.45), transparent 55%),
+    linear-gradient(170deg, #e0682a, var(--clay));
+
+  small {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    opacity: 0.95;
+  }
+
+  h1 {
+    font-size: clamp(2.3rem, 11vw, 2.9rem);
+    font-weight: 700;
+    text-shadow: 0 3px 0 var(--clay-dark), 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.sheet {
+  position: relative;
+  flex: 1;
+  margin-top: -34px;
+  padding: 30px 24px calc(28px + var(--safe-bottom));
+  background: var(--sand);
+  border-radius: 34px 34px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: 0 -10px 30px rgba(43, 20, 8, 0.25);
+}
+
+.title {
+  h2 {
+    font-size: 1.8rem;
+    color: var(--clay-dark);
+  }
+  p {
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.password {
+  position: relative;
+
+  .input {
+    padding-right: 56px;
+  }
+
+  button {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: none;
+    color: var(--ink-faint);
+  }
+}
+
+.submit {
+  margin-top: 6px;
+}
+
+.switch {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+
+  a {
+    text-decoration: none;
+    margin-left: 4px;
+  }
+}

@@ -1,0 +1,59 @@
+@let m = mission();
+@let q = question();
+
+<div class="page" [style.--accent]="m.color">
+  <header class="top">
+    <div class="bar">
+      <a class="icon-btn" [routerLink]="['/mission', m.id]" aria-label="Back to the lesson"><app-icon name="back" /></a>
+      <div class="titles">
+        <p>Mission {{ m.id }}</p>
+        <h1>{{ m.title }}</h1>
+      </div>
+      <span class="count">{{ step() + 1 }}/{{ total() }}</span>
+    </div>
+
+    <div class="progress" role="progressbar" [attr.aria-valuenow]="step() + 1" aria-valuemin="1" [attr.aria-valuemax]="total()">
+      @for (x of m.questions; track $index; let i = $index) {
+        <span [class.done]="i < step()" [class.current]="i === step()"></span>
+      }
+    </div>
+  </header>
+
+  @for (current of [step()]; track current) {
+    <section class="question fade-up">
+      <p class="label">Question {{ step() + 1 }}</p>
+      <h2>{{ q.text }}</h2>
+
+      <div class="options" role="radiogroup" [attr.aria-label]="q.text">
+        @for (o of q.options; track $index; let i = $index) {
+          <button
+            type="button"
+            role="radio"
+            class="option"
+            [class.selected]="selected() === i"
+            [attr.aria-checked]="selected() === i"
+            (click)="choose(i)"
+          >
+            <span class="letter">{{ letters[i] }}</span>
+            <span class="text">{{ o.text }}</span>
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <footer class="cta">
+    @if (step() > 0) {
+      <button type="button" class="icon-btn prev" (click)="back()" aria-label="Previous question"><app-icon name="back" /></button>
+    }
+    <button type="button" class="btn btn-primary block" [disabled]="selected() < 0" (click)="next()">
+      @if (isLast()) {
+        Finish
+        <app-icon name="check" [stroke]="3" />
+      } @else {
+        Next question
+        <app-icon name="next" [stroke]="2.8" />
+      }
+    </button>
+  </footer>
+</div>

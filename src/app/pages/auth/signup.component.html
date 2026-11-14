@@ -1,0 +1,51 @@
+<div class="page">
+  <header class="brand">
+    <small>Welcome to</small>
+    <h1>Time Travelers</h1>
+  </header>
+  <div class="hero">
+    <img src="images/cover-sm.webp" srcset="images/cover-sm.webp 760w, images/cover.webp 1280w" sizes="(max-width: 480px) 100vw, 480px" alt="Three young explorers in front of a time portal, between the pyramids, a Greek temple and the Colosseum" />
+  </div>
+
+  <section class="sheet">
+    <div class="title fade-up">
+      <h2>Sign up</h2>
+      <p>Create your explorer and start traveling through time!</p>
+    </div>
+
+    <form (ngSubmit)="submit()" class="fade-up" style="animation-delay: 0.08s">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" class="input" [(ngModel)]="name" autocomplete="username" placeholder="e.g. Sofia" maxlength="30" required />
+      </div>
+
+      <div class="field">
+        <label for="grade">Grade</label>
+        <select id="grade" name="grade" class="input" [(ngModel)]="grade" required>
+          <option value="" disabled>Choose your grade</option>
+          @for (g of grades; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password">
+          <input id="password" name="password" class="input" [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" autocomplete="new-password" placeholder="At least 4 characters" required />
+          <button type="button" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+            <app-icon [name]="showPassword() ? 'eye-off' : 'eye'" [size]="22" />
+          </button>
+        </div>
+      </div>
+
+      @if (error()) {
+        <p class="form-error" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary block submit">Start my journey</button>
+    </form>
+
+    <p class="switch">Already have an account?<a routerLink="/login">Sign in</a></p>
+  </section>
+</div>
